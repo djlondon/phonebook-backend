@@ -35,15 +35,14 @@ app.get('/api/persons/:id', (request, response, next) => {
     .then(person => {
       if (person) {
         response.json(person)
-      }
-      else {
+      } else {
         response.status(404).end()
       }
     })
     .catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   personModel.Person.findByIdAndDelete(request.params.id).then(person => {
     if (person) {
       response.status(204).end()
@@ -64,7 +63,7 @@ app.post('/api/persons', (request, response, next) => {
   console.log(/\d{2,3}-\d+/.test(body.number))
   const person = new personModel.Person({
     name: body.name,
-    number: body.number,
+    number: body.number
   })
   person.save()
     .then(savedNote => response.json(savedNote))
@@ -75,13 +74,13 @@ app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
   const person = {
     name: body.name,
-    number: body.number,
+    number: body.number
   }
 
   personModel.Person.findByIdAndUpdate(
     request.params.id,
     person,
-    { new: true, runValidators: true, context: 'query' },
+    { new: true, runValidators: true, context: 'query' }
   )
     .then(person => {
       if (person) {
